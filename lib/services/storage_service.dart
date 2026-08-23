@@ -56,9 +56,9 @@ class StorageService {
 
   static List<Person> getSamplePersonnel() {
     return [
-      Person(id: '1', name: 'سیاوش طاهری', role: 'کارشناس فنی'),
+      Person(id: '1', name: 'محسن حسینی', role: 'سرپرست بخش'),
       Person(id: '2', name: 'روح اله عزیزی', role: 'مسئول کارگاه'),
-      Person(id: '3', name: 'محسن حسینی', role: 'سرپرست بخش'),
+      Person(id: '3', name: 'سیاوش طاهری', role: 'کارشناس فنی'),
       Person(id: '4', name: 'علی رضا کاظمی', role: 'تکنسین'),
       Person(id: '5', name: 'محمد مهدی کریمی', role: 'انباردار'),
       Person(id: '6', name: 'حسین جعفری', role: 'حراست'),

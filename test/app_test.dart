@@ -82,11 +82,6 @@ void main() {
 
   group('PDF Generator Tests', () {
     testWidgets('Generates PDF bytes for 3 personnel', (tester) async {
-      final personnel = [
-        Person(id: '1', name: 'سیاوش طاهری'),
-        Person(id: '2', name: 'روح اله عزیزی'),
-        Person(id: '3', name: 'محسن حسینی'),
-      ];
       final config = FormConfig(year: 1405, month: 6);
 
       // Verify that splitting produces 2 pages of days

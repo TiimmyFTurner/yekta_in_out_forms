@@ -226,12 +226,20 @@ class PdfGeneratorService {
                 ),
                 child: pw.Transform.rotateBox(
                   angle: pi / 2,
-                  child: pw.Text(
-                    'تاریخ',
-                    style: pw.TextStyle(font: ttfBold, fontSize: 9.5),
-                    textAlign: pw.TextAlign.center,
-                    textDirection: pw.TextDirection.rtl,
-                    softWrap: false,
+                  child: pw.Container(
+                    width: headerDateHeight - 4,
+                    height: (nameColWidth + inOutColWidth) - 4,
+                    alignment: pw.Alignment.center,
+                    child: pw.FittedBox(
+                      fit: pw.BoxFit.scaleDown,
+                      child: pw.Text(
+                        'تاریخ',
+                        style: pw.TextStyle(font: ttfBold, fontSize: 9.5),
+                        textAlign: pw.TextAlign.center,
+                        textDirection: pw.TextDirection.rtl,
+                        softWrap: false,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -250,12 +258,20 @@ class PdfGeneratorService {
                 ),
                 child: pw.Transform.rotateBox(
                   angle: pi / 2,
-                  child: pw.Text(
-                    'ایام',
-                    style: pw.TextStyle(font: ttfBold, fontSize: 9.5),
-                    textAlign: pw.TextAlign.center,
-                    textDirection: pw.TextDirection.rtl,
-                    softWrap: false,
+                  child: pw.Container(
+                    width: headerDayHeight - 4,
+                    height: (nameColWidth + inOutColWidth) - 4,
+                    alignment: pw.Alignment.center,
+                    child: pw.FittedBox(
+                      fit: pw.BoxFit.scaleDown,
+                      child: pw.Text(
+                        'ایام',
+                        style: pw.TextStyle(font: ttfBold, fontSize: 9.5),
+                        textAlign: pw.TextAlign.center,
+                        textDirection: pw.TextDirection.rtl,
+                        softWrap: false,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -284,15 +300,21 @@ class PdfGeneratorService {
                                   personnelChunk[i].name.isNotEmpty)
                               ? pw.Transform.rotateBox(
                                   angle: pi / 2,
-                                  child: pw.Text(
-                                    personnelChunk[i].name,
-                                    style: pw.TextStyle(
-                                      font: ttfBold,
-                                      fontSize: 10.0,
+                                  child: pw.Container(
+                                    width: personSpanHeight - 6,
+                                    height: nameColWidth - 4,
+                                    alignment: pw.Alignment.center,
+                                    child: pw.Text(
+                                      personnelChunk[i].name,
+                                      style: pw.TextStyle(
+                                        font: ttfBold,
+                                        fontSize: 9.5,
+                                      ),
+                                      textAlign: pw.TextAlign.center,
+                                      textDirection: pw.TextDirection.rtl,
+                                      maxLines: 2,
+                                      softWrap: true,
                                     ),
-                                    textAlign: pw.TextAlign.center,
-                                    textDirection: pw.TextDirection.rtl,
-                                    softWrap: false,
                                   ),
                                 )
                               : pw.SizedBox(),
@@ -318,12 +340,23 @@ class PdfGeneratorService {
                           ),
                           child: pw.Transform.rotateBox(
                             angle: pi / 2,
-                            child: pw.Text(
-                              'ورود',
-                              style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
-                              textAlign: pw.TextAlign.center,
-                              textDirection: pw.TextDirection.rtl,
-                              softWrap: false,
+                            child: pw.Container(
+                              width: dataRowHeight - 4,
+                              height: inOutColWidth - 4,
+                              alignment: pw.Alignment.center,
+                              child: pw.FittedBox(
+                                fit: pw.BoxFit.scaleDown,
+                                child: pw.Text(
+                                  'ورود',
+                                  style: pw.TextStyle(
+                                    font: ttfBold,
+                                    fontSize: 8.5,
+                                  ),
+                                  textAlign: pw.TextAlign.center,
+                                  textDirection: pw.TextDirection.rtl,
+                                  softWrap: false,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -342,12 +375,23 @@ class PdfGeneratorService {
                           ),
                           child: pw.Transform.rotateBox(
                             angle: pi / 2,
-                            child: pw.Text(
-                              'خروج',
-                              style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
-                              textAlign: pw.TextAlign.center,
-                              textDirection: pw.TextDirection.rtl,
-                              softWrap: false,
+                            child: pw.Container(
+                              width: dataRowHeight - 4,
+                              height: inOutColWidth - 4,
+                              alignment: pw.Alignment.center,
+                              child: pw.FittedBox(
+                                fit: pw.BoxFit.scaleDown,
+                                child: pw.Text(
+                                  'خروج',
+                                  style: pw.TextStyle(
+                                    font: ttfBold,
+                                    fontSize: 8.5,
+                                  ),
+                                  textAlign: pw.TextAlign.center,
+                                  textDirection: pw.TextDirection.rtl,
+                                  softWrap: false,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -379,15 +423,23 @@ class PdfGeneratorService {
                   child: col < days.length
                       ? pw.Transform.rotateBox(
                           angle: pi / 2,
-                          child: pw.Text(
-                            days[col].formattedDate,
-                            style: pw.TextStyle(
-                              font: ttfRegular,
-                              fontSize: 8.0,
+                          child: pw.Container(
+                            width: headerDateHeight - 4,
+                            height: dayColWidth - 4,
+                            alignment: pw.Alignment.center,
+                            child: pw.FittedBox(
+                              fit: pw.BoxFit.scaleDown,
+                              child: pw.Text(
+                                days[col].formattedDate,
+                                style: pw.TextStyle(
+                                  font: ttfRegular,
+                                  fontSize: 8.0,
+                                ),
+                                textAlign: pw.TextAlign.center,
+                                textDirection: pw.TextDirection.rtl,
+                                softWrap: false,
+                              ),
                             ),
-                            textAlign: pw.TextAlign.center,
-                            textDirection: pw.TextDirection.rtl,
-                            softWrap: false,
                           ),
                         )
                       : pw.SizedBox(),
@@ -408,15 +460,25 @@ class PdfGeneratorService {
                   child: col < days.length
                       ? pw.Transform.rotateBox(
                           angle: pi / 2,
-                          child: pw.Text(
-                            days[col].weekdayName,
-                            style: pw.TextStyle(
-                              font: days[col].isFriday ? ttfBold : ttfRegular,
-                              fontSize: 8.0,
+                          child: pw.Container(
+                            width: headerDayHeight - 4,
+                            height: dayColWidth - 4,
+                            alignment: pw.Alignment.center,
+                            child: pw.FittedBox(
+                              fit: pw.BoxFit.scaleDown,
+                              child: pw.Text(
+                                days[col].weekdayName,
+                                style: pw.TextStyle(
+                                  font: days[col].isFriday
+                                      ? ttfBold
+                                      : ttfRegular,
+                                  fontSize: 8.0,
+                                ),
+                                textAlign: pw.TextAlign.center,
+                                textDirection: pw.TextDirection.rtl,
+                                softWrap: false,
+                              ),
                             ),
-                            textAlign: pw.TextAlign.center,
-                            textDirection: pw.TextDirection.rtl,
-                            softWrap: false,
                           ),
                         )
                       : pw.SizedBox(),

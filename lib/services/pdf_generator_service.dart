@@ -200,7 +200,7 @@ class PdfGeneratorService {
               child: pw.Text(
                 title,
                 style: pw.TextStyle(font: ttfBold, fontSize: 11.0),
-                textAlign: pw.TextAlign.center,
+                // textAlign: pw.TextAlign.center,
                 textDirection: pw.TextDirection.rtl,
                 softWrap: false,
               ),
@@ -278,13 +278,17 @@ class PdfGeneratorService {
                               right: true,
                             ),
                           ),
-                          child: (i < personnelChunk.length &&
+                          child:
+                              (i < personnelChunk.length &&
                                   personnelChunk[i].name.isNotEmpty)
                               ? pw.Transform.rotateBox(
                                   angle: pi / 2,
                                   child: pw.Text(
                                     personnelChunk[i].name,
-                                    style: pw.TextStyle(font: ttfBold, fontSize: 10.0),
+                                    style: pw.TextStyle(
+                                      font: ttfBold,
+                                      fontSize: 10.0,
+                                    ),
                                     textAlign: pw.TextAlign.center,
                                     textDirection: pw.TextDirection.rtl,
                                     softWrap: false,

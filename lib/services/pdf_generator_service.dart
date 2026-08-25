@@ -186,7 +186,8 @@ class PdfGeneratorService {
           pw.Container(
             width: titleColWidth,
             height: totalTableHeight,
-            alignment: pw.Alignment.center,
+            alignment: pw.Alignment.bottomCenter,
+            padding: const pw.EdgeInsets.only(bottom: 160),
             decoration: pw.BoxDecoration(
               border: cellBorder(
                 top: true,
@@ -200,7 +201,7 @@ class PdfGeneratorService {
               child: pw.Text(
                 title,
                 style: pw.TextStyle(font: ttfBold, fontSize: 11.0),
-                // textAlign: pw.TextAlign.center,
+                textAlign: pw.TextAlign.center,
                 textDirection: pw.TextDirection.rtl,
                 softWrap: false,
               ),

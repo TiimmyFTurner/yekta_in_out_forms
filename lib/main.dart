@@ -28,7 +28,7 @@ class _YektaInOutAppState extends State<YektaInOutApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Yekta In Out Forms',
+      title: 'سازنده فرم ورود و خروج پرسنل',
       debugShowCheckedModeBanner: false,
       themeMode: _themeMode,
       theme: AppTheme.lightTheme(),

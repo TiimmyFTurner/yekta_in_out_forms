@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'ui/theme/app_theme.dart';
 import 'ui/views/home_screen.dart';
 
@@ -27,16 +28,13 @@ class _YektaInOutAppState extends State<YektaInOutApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'سازنده فرم ورود و خروج پرسنل',
+      title: 'Yekta In Out Forms',
       debugShowCheckedModeBanner: false,
       themeMode: _themeMode,
       theme: AppTheme.lightTheme(),
       darkTheme: AppTheme.darkTheme(),
       locale: const Locale('fa', 'IR'),
-      supportedLocales: const [
-        Locale('fa', 'IR'),
-        Locale('en', 'US'),
-      ],
+      supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

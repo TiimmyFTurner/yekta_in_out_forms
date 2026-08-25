@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../models/person.dart';
 import '../../models/personnel_list.dart';
 import '../../models/form_config.dart';
@@ -101,11 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final monthName = JalaliHelper.getMonthName(_formConfig.month);
 
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final totalPersonnel = _currentPersonnel.length;
@@ -131,8 +128,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.table_chart_rounded,
-                        color: Colors.white, size: 20),
+                    child: const Icon(
+                      Icons.table_chart_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                 ),
               ),
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    'تولید فرم‌های چاپی استاندارد نیمه‌ماه (هر صفحه ۳ نفر)',
+                    'سازنده فرم‌های ورود و خروج پرسنل (هر صفحه ۳ نفر)',
                     style: TextStyle(fontSize: 11, color: Colors.grey),
                   ),
                 ],
@@ -158,16 +158,21 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               margin: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color:
-                    theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
+                color: theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.4,
+                ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.2)),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today,
-                      size: 16, color: Color(0xFF1E3A8A)),
+                  const Icon(
+                    Icons.calendar_today,
+                    size: 16,
+                    color: Color(0xFF1E3A8A),
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     '$monthName ${_formConfig.year} • ${_activeList.name} ($totalPersonnel نفر - $totalPages صفحه)',
@@ -188,7 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
               tooltip: isDark ? 'حالت روشن' : 'حالت تیره',
               onPressed: () {
                 widget.onThemeModeChanged(
-                    isDark ? ThemeMode.light : ThemeMode.dark);
+                  isDark ? ThemeMode.light : ThemeMode.dark,
+                );
               },
             ),
             const SizedBox(width: 16),

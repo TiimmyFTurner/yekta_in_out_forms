@@ -76,11 +76,10 @@ class PdfGeneratorService {
         pw.Page(
           pageFormat: PdfPageFormat.a4.landscape,
           margin: const pw.EdgeInsets.only(
-            top:
-                50, // Extra generous top margin for binder hole punch clearance
-            bottom: 24,
-            left: 30,
-            right: 28,
+            top: 65, // Generous top margin for binder hole punch clearance (~23 mm)
+            bottom: 30,
+            left: 40,
+            right: 36,
           ),
           theme: theme,
           build: (pw.Context context) {
@@ -103,10 +102,10 @@ class PdfGeneratorService {
           pw.Page(
             pageFormat: PdfPageFormat.a4.landscape,
             margin: const pw.EdgeInsets.only(
-              top: 50, // Extra generous top margin for binder hole punch clearance
-              bottom: 24,
-              left: 30,
-              right: 28,
+              top: 65, // Generous top margin for binder hole punch clearance (~23 mm)
+              bottom: 30,
+              left: 40,
+              right: 36,
             ),
             theme: theme,
             build: (pw.Context context) {
@@ -140,21 +139,21 @@ class PdfGeneratorService {
     const double borderWidth = 1.0;
     const borderColor = PdfColors.black;
 
-    // Dimensions calibrated for binder margins on A4 Landscape
-    const double headerDateHeight = 60.0;
-    const double headerDayHeight = 40.0;
-    const double dataRowHeight = 69.0;
+    // Dimensions calibrated for generous binder margins on A4 Landscape
+    const double headerDateHeight = 56.0;
+    const double headerDayHeight = 36.0;
+    const double dataRowHeight = 65.0;
     const int personCount = 3;
-    const double personSpanHeight = dataRowHeight * 2; // 138.0
-    const double allPersonsHeight = dataRowHeight * 6; // 414.0
+    const double personSpanHeight = dataRowHeight * 2; // 130.0
+    const double allPersonsHeight = dataRowHeight * 6; // 390.0
     const double totalTableHeight =
-        headerDateHeight + headerDayHeight + allPersonsHeight; // 514.0
+        headerDateHeight + headerDayHeight + allPersonsHeight; // 482.0
 
-    const double titleColWidth = 34.0;
-    const double nameColWidth = 56.0;
-    const double inOutColWidth = 28.0;
+    const double titleColWidth = 32.0;
+    const double nameColWidth = 52.0;
+    const double inOutColWidth = 26.0;
     const int totalDayColumns = 16;
-    const double dayColWidth = 41.0;
+    const double dayColWidth = 39.5;
 
     pw.BoxBorder cellBorder({
       bool top = true,
@@ -208,80 +207,12 @@ class PdfGeneratorService {
             ),
           ),
 
-          // ================= COLUMN 1: PERSONNEL NAMES COLUMN =================
+          // ================= COLUMN 1 & 2: PERSONNEL & IN/OUT BLOCK =================
           pw.Column(
             children: [
-              // Row 0 header with dot '.' matching template
+              // Row 0 Header: تاریخ (merged horizontally across nameColWidth + inOutColWidth)
               pw.Container(
-                width: nameColWidth,
-                height: headerDateHeight,
-                alignment: pw.Alignment.center,
-                decoration: pw.BoxDecoration(
-                  border: cellBorder(
-                    top: true,
-                    bottom: true,
-                    left: false,
-                    right: true,
-                  ),
-                ),
-                child: pw.Text(
-                  '',
-                  style: pw.TextStyle(font: ttfBold, fontSize: 12.0),
-                  textAlign: pw.TextAlign.center,
-                ),
-              ),
-              // Row 1 header spacer
-              pw.Container(
-                width: nameColWidth,
-                height: headerDayHeight,
-                decoration: pw.BoxDecoration(
-                  border: cellBorder(
-                    top: false,
-                    bottom: true,
-                    left: false,
-                    right: true,
-                  ),
-                ),
-              ),
-              // 3 merged cells (each spanning 2 rows: ورود & خروج)
-              for (int i = 0; i < personCount; i++)
-                pw.Container(
-                  width: nameColWidth,
-                  height: personSpanHeight,
-                  alignment: pw.Alignment.center,
-                  padding: const pw.EdgeInsets.symmetric(horizontal: 2),
-                  decoration: pw.BoxDecoration(
-                    border: cellBorder(
-                      top: false,
-                      bottom: true,
-                      left: false,
-                      right: true,
-                    ),
-                  ),
-                  child:
-                      (i < personnelChunk.length &&
-                          personnelChunk[i].name.isNotEmpty)
-                      ? pw.Transform.rotateBox(
-                          angle: pi / 2,
-                          child: pw.Text(
-                            personnelChunk[i].name,
-                            style: pw.TextStyle(font: ttfBold, fontSize: 10.0),
-                            textAlign: pw.TextAlign.center,
-                            textDirection: pw.TextDirection.rtl,
-                            softWrap: false,
-                          ),
-                        )
-                      : pw.SizedBox(),
-                ),
-            ],
-          ),
-
-          // ================= COLUMN 2: IN / OUT LABEL COLUMN =================
-          pw.Column(
-            children: [
-              // Header Row 1: تاریخ
-              pw.Container(
-                width: inOutColWidth,
+                width: nameColWidth + inOutColWidth,
                 height: headerDateHeight,
                 alignment: pw.Alignment.center,
                 decoration: pw.BoxDecoration(
@@ -303,9 +234,9 @@ class PdfGeneratorService {
                   ),
                 ),
               ),
-              // Header Row 2: ایام
+              // Row 1 Header: ایام (merged horizontally across nameColWidth + inOutColWidth)
               pw.Container(
-                width: inOutColWidth,
+                width: nameColWidth + inOutColWidth,
                 height: headerDayHeight,
                 alignment: pw.Alignment.center,
                 decoration: pw.BoxDecoration(
@@ -327,57 +258,99 @@ class PdfGeneratorService {
                   ),
                 ),
               ),
-              // 6 Data Rows (ورود / خروج alternating)
-              for (int i = 0; i < personCount; i++) ...[
-                // ورود
-                pw.Container(
-                  width: inOutColWidth,
-                  height: dataRowHeight,
-                  alignment: pw.Alignment.center,
-                  decoration: pw.BoxDecoration(
-                    border: cellBorder(
-                      top: false,
-                      bottom: true,
-                      left: false,
-                      right: true,
-                    ),
+              // 6 Personnel & In/Out Data Rows
+              pw.Row(
+                children: [
+                  // Personnel Names Sub-Column
+                  pw.Column(
+                    children: [
+                      for (int i = 0; i < personCount; i++)
+                        pw.Container(
+                          width: nameColWidth,
+                          height: personSpanHeight,
+                          alignment: pw.Alignment.center,
+                          padding: const pw.EdgeInsets.symmetric(horizontal: 2),
+                          decoration: pw.BoxDecoration(
+                            border: cellBorder(
+                              top: false,
+                              bottom: true,
+                              left: false,
+                              right: true,
+                            ),
+                          ),
+                          child: (i < personnelChunk.length &&
+                                  personnelChunk[i].name.isNotEmpty)
+                              ? pw.Transform.rotateBox(
+                                  angle: pi / 2,
+                                  child: pw.Text(
+                                    personnelChunk[i].name,
+                                    style: pw.TextStyle(font: ttfBold, fontSize: 10.0),
+                                    textAlign: pw.TextAlign.center,
+                                    textDirection: pw.TextDirection.rtl,
+                                    softWrap: false,
+                                  ),
+                                )
+                              : pw.SizedBox(),
+                        ),
+                    ],
                   ),
-                  child: pw.Transform.rotateBox(
-                    angle: pi / 2,
-                    child: pw.Text(
-                      'ورود',
-                      style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
-                      textAlign: pw.TextAlign.center,
-                      textDirection: pw.TextDirection.rtl,
-                      softWrap: false,
-                    ),
+                  // In / Out Sub-Column
+                  pw.Column(
+                    children: [
+                      for (int i = 0; i < personCount; i++) ...[
+                        // ورود
+                        pw.Container(
+                          width: inOutColWidth,
+                          height: dataRowHeight,
+                          alignment: pw.Alignment.center,
+                          decoration: pw.BoxDecoration(
+                            border: cellBorder(
+                              top: false,
+                              bottom: true,
+                              left: false,
+                              right: true,
+                            ),
+                          ),
+                          child: pw.Transform.rotateBox(
+                            angle: pi / 2,
+                            child: pw.Text(
+                              'ورود',
+                              style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
+                              textAlign: pw.TextAlign.center,
+                              textDirection: pw.TextDirection.rtl,
+                              softWrap: false,
+                            ),
+                          ),
+                        ),
+                        // خروج
+                        pw.Container(
+                          width: inOutColWidth,
+                          height: dataRowHeight,
+                          alignment: pw.Alignment.center,
+                          decoration: pw.BoxDecoration(
+                            border: cellBorder(
+                              top: false,
+                              bottom: true,
+                              left: false,
+                              right: true,
+                            ),
+                          ),
+                          child: pw.Transform.rotateBox(
+                            angle: pi / 2,
+                            child: pw.Text(
+                              'خروج',
+                              style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
+                              textAlign: pw.TextAlign.center,
+                              textDirection: pw.TextDirection.rtl,
+                              softWrap: false,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-                // خروج
-                pw.Container(
-                  width: inOutColWidth,
-                  height: dataRowHeight,
-                  alignment: pw.Alignment.center,
-                  decoration: pw.BoxDecoration(
-                    border: cellBorder(
-                      top: false,
-                      bottom: true,
-                      left: false,
-                      right: true,
-                    ),
-                  ),
-                  child: pw.Transform.rotateBox(
-                    angle: pi / 2,
-                    child: pw.Text(
-                      'خروج',
-                      style: pw.TextStyle(font: ttfBold, fontSize: 8.5),
-                      textAlign: pw.TextAlign.center,
-                      textDirection: pw.TextDirection.rtl,
-                      softWrap: false,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ],
           ),
 

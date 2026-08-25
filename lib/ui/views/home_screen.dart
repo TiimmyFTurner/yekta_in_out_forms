@@ -118,14 +118,23 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  'assets/logo.png',
+                  height: 38,
+                  width: 38,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.table_chart_rounded,
+                        color: Colors.white, size: 20),
+                  ),
                 ),
-                child: const Icon(Icons.table_chart_rounded,
-                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/person.dart';
+import '../../models/personnel_list.dart';
 import '../../models/form_config.dart';
 import '../../services/storage_service.dart';
 import '../../services/jalali_helper.dart';
@@ -24,7 +25,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool _isLoading = true;
-  List<Person> _personnel = [];
+  List<PersonnelList> _personnelLists = [];
+  String _activeListId = '';
   late FormConfig _formConfig;
 
   @override
@@ -38,20 +40,51 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadInitialData() async {
-    final loadedPersonnel = await StorageService.loadPersonnel();
+    final loadedLists = await StorageService.loadAllPersonnelLists();
+    final savedActiveId = await StorageService.loadActiveListId();
     final loadedConfig = await StorageService.loadFormConfig();
+
+    String activeId = savedActiveId ?? '';
+    if (activeId.isEmpty || !loadedLists.any((l) => l.id == activeId)) {
+      activeId = loadedLists.isNotEmpty ? loadedLists.first.id : 'default';
+    }
+
     setState(() {
-      _personnel = loadedPersonnel;
+      _personnelLists = loadedLists;
+      _activeListId = activeId;
       _formConfig = loadedConfig;
       _isLoading = false;
     });
   }
 
-  void _onPersonnelChanged(List<Person> updated) {
+  PersonnelList get _activeList {
+    if (_personnelLists.isEmpty) {
+      return const PersonnelList(id: 'default', name: 'لیست اصلی');
+    }
+    return _personnelLists.firstWhere(
+      (l) => l.id == _activeListId,
+      orElse: () => _personnelLists.first,
+    );
+  }
+
+  List<Person> get _currentPersonnel => _activeList.members;
+
+  void _onPersonnelListsChanged(List<PersonnelList> updatedLists) {
     setState(() {
-      _personnel = updated;
+      _personnelLists = updatedLists;
+      if (!updatedLists.any((l) => l.id == _activeListId)) {
+        _activeListId = updatedLists.isNotEmpty ? updatedLists.first.id : '';
+      }
     });
-    StorageService.savePersonnel(updated);
+    StorageService.saveAllPersonnelLists(updatedLists);
+    StorageService.saveActiveListId(_activeListId);
+  }
+
+  void _onActiveListChanged(String newId) {
+    setState(() {
+      _activeListId = newId;
+    });
+    StorageService.saveActiveListId(newId);
   }
 
   void _onConfigChanged(FormConfig updated) {
@@ -75,8 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    final totalPersonnel = _personnel.length;
-    final totalPages = (totalPersonnel == 0 ? 1 : (totalPersonnel / 3).ceil()) * 2;
+    final totalPersonnel = _currentPersonnel.length;
+    final totalPages =
+        (totalPersonnel == 0 ? 1 : (totalPersonnel / 3).ceil()) * 2;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -90,7 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: theme.colorScheme.primary,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.table_chart_rounded, color: Colors.white, size: 20),
+                child: const Icon(Icons.table_chart_rounded,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Column(
@@ -109,21 +144,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           actions: [
-            // Status Chip
+            // Status Chip showing active list and total
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               margin: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
+                color:
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
+                border: Border.all(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today, size: 16, color: Color(0xFF1E3A8A)),
+                  const Icon(Icons.calendar_today,
+                      size: 16, color: Color(0xFF1E3A8A)),
                   const SizedBox(width: 6),
                   Text(
-                    '$monthName ${_formConfig.year} • $totalPersonnel نفر ($totalPages صفحه)',
+                    '$monthName ${_formConfig.year} • ${_activeList.name} ($totalPersonnel نفر - $totalPages صفحه)',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.bold,
@@ -140,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
               tooltip: isDark ? 'حالت روشن' : 'حالت تیره',
               onPressed: () {
-                widget.onThemeModeChanged(isDark ? ThemeMode.light : ThemeMode.dark);
+                widget.onThemeModeChanged(
+                    isDark ? ThemeMode.light : ThemeMode.dark);
               },
             ),
             const SizedBox(width: 16),
@@ -182,19 +221,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 index: _selectedIndex,
                 children: [
                   PersonnelView(
-                    personnel: _personnel,
-                    onPersonnelChanged: _onPersonnelChanged,
+                    personnelLists: _personnelLists,
+                    activeListId: _activeListId,
+                    onPersonnelListsChanged: _onPersonnelListsChanged,
+                    onActiveListChanged: _onActiveListChanged,
                   ),
                   FormSettingsView(
                     config: _formConfig,
-                    personnel: _personnel,
+                    personnel: _currentPersonnel,
                     onConfigChanged: _onConfigChanged,
                     onPreviewRequested: () {
                       setState(() => _selectedIndex = 2);
                     },
                   ),
                   PdfPreviewView(
-                    personnel: _personnel,
+                    personnel: _currentPersonnel,
                     config: _formConfig,
                   ),
                 ],

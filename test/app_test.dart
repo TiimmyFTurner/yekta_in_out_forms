@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yekta_in_out_forms/models/person.dart';
+import 'package:yekta_in_out_forms/models/personnel_list.dart';
 import 'package:yekta_in_out_forms/models/form_config.dart';
 import 'package:yekta_in_out_forms/services/jalali_helper.dart';
 
@@ -67,6 +68,27 @@ void main() {
       final modified = fromJson.copyWith(name: 'علی حسینی');
       expect(modified.name, equals('علی حسینی'));
       expect(modified.role, equals('سرپرست'));
+    });
+
+    test('PersonnelList serialization and copyWith', () {
+      final list = PersonnelList(
+        id: 'list_1',
+        name: 'شیفت شب',
+        members: [
+          Person(id: 'p1', name: 'سیاوش طاهری'),
+          Person(id: 'p2', name: 'روح اله عزیزی'),
+        ],
+      );
+      final json = list.toJson();
+      final fromJson = PersonnelList.fromJson(json);
+
+      expect(fromJson.id, equals('list_1'));
+      expect(fromJson.name, equals('شیفت شب'));
+      expect(fromJson.members.length, equals(2));
+      expect(fromJson.members.first.name, equals('سیاوش طاهری'));
+
+      final modified = fromJson.copyWith(name: 'شیفت روز');
+      expect(modified.name, equals('شیفت روز'));
     });
 
     test('FormConfig serialization', () {

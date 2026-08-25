@@ -96,16 +96,16 @@ class PdfGeneratorService {
         ),
       );
 
-      // Page 2: Second Half (Days 17 to end of month)
+      // Page 2: Second Half (Days 17 to end of month) - Duplex Back Side
       if (secondHalfDays.isNotEmpty) {
         pdf.addPage(
           pw.Page(
             pageFormat: PdfPageFormat.a4.landscape,
             margin: const pw.EdgeInsets.only(
-              top: 65, // Generous top margin for binder hole punch clearance (~23 mm)
-              bottom: 30,
-              left: 40,
-              right: 36,
+              top: 30,
+              bottom: 65, // Duplex binder punch clearance on the back of the sheet (~23 mm)
+              left: 36, // Mirrored side margin
+              right: 40, // Mirrored side margin
             ),
             theme: theme,
             build: (pw.Context context) {

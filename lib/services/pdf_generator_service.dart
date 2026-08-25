@@ -483,20 +483,37 @@ class PdfGeneratorService {
                         )
                       : pw.SizedBox(),
                 ),
-                // 6 Data Cells (for In & Out times/signatures)
+                // 6 Data Rows (each split into 2 sub-cells side-by-side)
                 for (int r = 0; r < personCount * 2; r++)
-                  pw.Container(
-                    width: dayColWidth,
-                    height: dataRowHeight,
-                    alignment: pw.Alignment.center,
-                    decoration: pw.BoxDecoration(
-                      border: cellBorder(
-                        top: false,
-                        bottom: true,
-                        left: false,
-                        right: true,
+                  pw.Row(
+                    children: [
+                      // Sub-cell 1 (Left half)
+                      pw.Container(
+                        width: dayColWidth / 2,
+                        height: dataRowHeight,
+                        decoration: pw.BoxDecoration(
+                          border: cellBorder(
+                            top: false,
+                            bottom: true,
+                            left: false,
+                            right: true,
+                          ),
+                        ),
                       ),
-                    ),
+                      // Sub-cell 2 (Right half)
+                      pw.Container(
+                        width: dayColWidth / 2,
+                        height: dataRowHeight,
+                        decoration: pw.BoxDecoration(
+                          border: cellBorder(
+                            top: false,
+                            bottom: true,
+                            left: false,
+                            right: true,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),
